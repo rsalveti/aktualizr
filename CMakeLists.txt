@@ -42,6 +42,10 @@ if(BUILD_GENIVI)
     add_definitions(-DWITH_GENIVI)
 endif(BUILD_GENIVI)
 
+if(BUILD_OSTREE)
+    find_package(SQLite3 REQUIRED)
+endif(BUILD_OSTREE)
+
 if(BUILD_P11)
     find_package(LibP11 REQUIRED)
     add_definitions(-DBUILD_P11)
@@ -144,6 +148,7 @@ include_directories(${PROJECT_SOURCE_DIR}/third_party/picojson)
 include_directories(${PROJECT_SOURCE_DIR}/third_party/rvi_lib/include)
 include_directories(${Boost_INCLUDE_DIR})
 include_directories(${LIBOSTREE_INCLUDE_DIRS})
+include_directories(${SQLITE3_INCLUDE_DIRS})
 include_directories(${LIBDBUS_INCLUDE_DIRS})
 include_directories(${sodium_INCLUDE_DIR})
 
