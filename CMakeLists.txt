@@ -9,6 +9,7 @@ option(BUILD_GENIVI "Set to ON to compile with SWM and RVI gateway support" OFF)
 option(BUILD_OSTREE "Set to ON to compile with ostree and Uptane support" OFF)
 option(BUILD_SOTA_TOOLS "Set to ON to build SOTA tools" OFF)
 option(BUILD_ISOTP "Set to ON to build ISO-TP" OFF)
+option(BUILD_TESTS "Set to OFF to disable building tests" ON)
 option(INSTALL_LIB "Set to ON to install library and headers" OFF)
 
 if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
@@ -193,8 +194,10 @@ if(BUILD_OSTREE)
     add_subdirectory("src/aktualizr_info")
 endif(BUILD_OSTREE)
 
-include(CTest)
-add_subdirectory("tests" EXCLUDE_FROM_ALL)
+if(BUILD_TESTS)
+    include(CTest)
+    add_subdirectory("tests" EXCLUDE_FROM_ALL)
+endif(BUILD_TESTS)
 
 add_subdirectory("docs" EXCLUDE_FROM_ALL)
 

@@ -7,18 +7,26 @@ add_executable(example-interface ${MAIN_ECU_INTERFACE_SRC} example_flasher.cc)
 target_link_libraries(example-interface aktualizr_static_lib ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 target_compile_options(example-interface PUBLIC -DECUFLASHER_EXAMPLE)
 
-add_executable(aktualizr-validate-secondary-interface validate_secondary_interface_test.cc)
-set_property(TARGET aktualizr-validate-secondary-interface PROPERTY CXX_STANDARD 11)
-target_link_libraries(aktualizr-validate-secondary-interface ${Boost_LIBRARIES} gtest)
-
 if(BUILD_WITH_CODE_COVERAGE)
     target_link_libraries(example-interface gcov)
-    target_link_libraries(aktualizr-validate-secondary-interface gcov)
 endif(BUILD_WITH_CODE_COVERAGE)
 
-aktualizr_source_file_checks(${MAIN_ECU_INTERFACE_SRC} ${ECU_INTERFACE_HEADERS} example_flasher.cc validate_secondary_interface_test.cc)
+aktualizr_source_file_checks(${MAIN_ECU_INTERFACE_SRC} ${ECU_INTERFACE_HEADERS} example_flasher.cc)
 
 install(TARGETS example-interface RUNTIME DESTINATION bin)
+
+
+if(BUILD_TESTS)
+    add_executable(aktualizr-validate-secondary-interface validate_secondary_interface_test.cc)
+    set_property(TARGET aktualizr-validate-secondary-interface PROPERTY CXX_STANDARD 11)
+    target_link_libraries(aktualizr-validate-secondary-interface ${Boost_LIBRARIES} gtest)
+
+    if(BUILD_WITH_CODE_COVERAGE)
+        target_link_libraries(aktualizr-validate-secondary-interface gcov)
+    endif(BUILD_WITH_CODE_COVERAGE)
+
+    aktualizr_source_file_checks(validate_secondary_interface_test.cc)
+endif(BUILD_TESTS)
 
 
 if(BUILD_ISOTP)
