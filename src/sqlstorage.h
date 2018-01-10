@@ -74,6 +74,7 @@ class SQLStorage : public INvStorage {
 
  private:
   const StorageConfig& config_;
+  boost::filesystem::path sqlite_db_path_;
   // request info
   SQLReqId request;
   std::map<std::string, std::string> req_params;

@@ -15,5 +15,5 @@ key_source = "pkcs11"
 
 [storage]
 type = "sqlite"
-path = "test_data/prov"
+path = "test_data/metadata"
 uptane_metadata_path = "repo"
