@@ -363,7 +363,7 @@ void TestIsotpInterface::populateEcus() {
     }
 
     if (((resp[1] << 8) | resp[2]) != HW_ID_DID) {
-      std::cerr << "Invalid DID " << ((resp[1] << 8) | resp[2]) << " when " << HW_ID_DID << " was expected"
+      std::cerr << "Invalid HW ID " << ((resp[1] << 8) | resp[2]) << " when " << HW_ID_DID << " was expected"
                 << std::endl;
       continue;
     }
@@ -376,13 +376,13 @@ void TestIsotpInterface::populateEcus() {
 
     if (resp.empty()) {  // timeout
       if (loglevel_ == 4) {
-        std::cerr << "Request for HW ID for id " << (int)id << " timed out" << std::endl;
+        std::cerr << "Request for ECU ID for id " << (int)id << " timed out" << std::endl;
       }
       continue;
     }
 
     if (resp.length() < 3) {
-      std::cerr << "Invalid response to request for HW ID" << std::endl;
+      std::cerr << "Invalid response to request for ECU ID" << std::endl;
       continue;
     }
 
@@ -392,7 +392,7 @@ void TestIsotpInterface::populateEcus() {
     }
 
     if (((resp[1] << 8) | resp[2]) != ECU_SERIAL_DID) {
-      std::cerr << "Invalid DID " << ((resp[1] << 8) | resp[2]) << " when " << ECU_SERIAL_DID << " was expected"
+      std::cerr << "Invalid ECU ID " << ((resp[1] << 8) | resp[2]) << " when " << ECU_SERIAL_DID << " was expected"
                 << std::endl;
       continue;
     }
