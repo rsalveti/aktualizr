@@ -303,7 +303,7 @@ bool SQLStorage::loadTlsCa(std::string* ca) {
   request = kSqlGetSimple;
   req_response.clear();
   if (sqlite3_exec(db.get(), "SELECT ca_cert FROM tls_creds LIMIT 1;", callback, this, NULL) != SQLITE_OK) {
-    LOG_ERROR << "Can't get device ID: " << sqlite3_errmsg(db.get());
+    LOG_ERROR << "Can't get CA certificate: " << sqlite3_errmsg(db.get());
     return false;
   }
 
@@ -325,7 +325,7 @@ bool SQLStorage::loadTlsCert(std::string* cert) {
   request = kSqlGetSimple;
   req_response.clear();
   if (sqlite3_exec(db.get(), "SELECT client_cert FROM tls_creds LIMIT 1;", callback, this, NULL) != SQLITE_OK) {
-    LOG_ERROR << "Can't get device ID: " << sqlite3_errmsg(db.get());
+    LOG_ERROR << "Can't get client certificate: " << sqlite3_errmsg(db.get());
     return false;
   }
 
@@ -460,6 +460,8 @@ bool SQLStorage::loadDeviceId(std::string* device_id) {
   }
 
   if (req_response.find("result") == req_response.end()) return false;
+
+  if(req_response["result"].empty()) return false;
 
   if (device_id) *device_id = req_response["result"];
 
