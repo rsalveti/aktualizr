@@ -29,7 +29,7 @@ void SQLStorage::storePrimaryKeys(const std::string& public_key, const std::stri
 }
 
 void SQLStorage::storePrimaryPublic(const std::string& public_key) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -59,7 +59,7 @@ void SQLStorage::storePrimaryPublic(const std::string& public_key) {
 }
 
 void SQLStorage::storePrimaryPrivate(const std::string& private_key) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -93,7 +93,7 @@ bool SQLStorage::loadPrimaryKeys(std::string* public_key, std::string* private_k
 }
 
 bool SQLStorage::loadPrimaryPublic(std::string* public_key) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -115,7 +115,7 @@ bool SQLStorage::loadPrimaryPublic(std::string* public_key) {
 }
 
 bool SQLStorage::loadPrimaryPrivate(std::string* private_key) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -137,7 +137,7 @@ bool SQLStorage::loadPrimaryPrivate(std::string* private_key) {
 }
 
 void SQLStorage::clearPrimaryKeys() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -157,7 +157,7 @@ void SQLStorage::storeTlsCreds(const std::string& ca, const std::string& cert, c
 }
 
 void SQLStorage::storeTlsCa(const std::string& ca) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -187,7 +187,7 @@ void SQLStorage::storeTlsCa(const std::string& ca) {
 }
 
 void SQLStorage::storeTlsCert(const std::string& cert) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -217,7 +217,7 @@ void SQLStorage::storeTlsCert(const std::string& cert) {
 }
 
 void SQLStorage::storeTlsPkey(const std::string& pkey) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -247,7 +247,7 @@ void SQLStorage::storeTlsPkey(const std::string& pkey) {
 }
 
 bool SQLStorage::loadTlsCreds(std::string* ca, std::string* cert, std::string* pkey) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -276,7 +276,7 @@ bool SQLStorage::loadTlsCreds(std::string* ca, std::string* cert, std::string* p
 }
 
 void SQLStorage::clearTlsCreds() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -290,7 +290,7 @@ void SQLStorage::clearTlsCreds() {
 }
 
 bool SQLStorage::loadTlsCa(std::string* ca) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -312,7 +312,7 @@ bool SQLStorage::loadTlsCa(std::string* ca) {
 }
 
 bool SQLStorage::loadTlsCert(std::string* cert) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -334,7 +334,7 @@ bool SQLStorage::loadTlsCert(std::string* cert) {
 }
 
 bool SQLStorage::loadTlsPkey(std::string* pkey) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -357,7 +357,7 @@ bool SQLStorage::loadTlsPkey(std::string* pkey) {
 
 #ifdef BUILD_OSTREE
 void SQLStorage::storeMetadata(const Uptane::MetaPack& metadata) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   clearMetadata();
 
@@ -378,7 +378,7 @@ void SQLStorage::storeMetadata(const Uptane::MetaPack& metadata) {
 }
 
 bool SQLStorage::loadMetadata(Uptane::MetaPack* metadata) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -410,7 +410,7 @@ bool SQLStorage::loadMetadata(Uptane::MetaPack* metadata) {
 }
 
 void SQLStorage::clearMetadata() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -426,7 +426,7 @@ void SQLStorage::clearMetadata() {
 #endif  // BUILD_OSTREE
 
 void SQLStorage::storeDeviceId(const std::string& device_id) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -442,7 +442,7 @@ void SQLStorage::storeDeviceId(const std::string& device_id) {
 }
 
 bool SQLStorage::loadDeviceId(std::string* device_id) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -464,7 +464,7 @@ bool SQLStorage::loadDeviceId(std::string* device_id) {
 }
 
 void SQLStorage::clearDeviceId() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -478,7 +478,7 @@ void SQLStorage::clearDeviceId() {
 }
 
 void SQLStorage::storeEcuRegistered() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -493,7 +493,7 @@ void SQLStorage::storeEcuRegistered() {
 }
 
 bool SQLStorage::loadEcuRegistered() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -513,7 +513,7 @@ bool SQLStorage::loadEcuRegistered() {
 }
 
 void SQLStorage::clearEcuRegistered() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -530,7 +530,7 @@ void SQLStorage::clearEcuRegistered() {
 void SQLStorage::storeEcuSerials(const std::vector<std::pair<std::string, std::string> >& serials) {
   if (serials.size() >= 1) {
     clearEcuSerials();
-    SQLite3Guard db(config_.sqldb_path.c_str());
+    SQLite3Guard db(config_.path.c_str());
 
     if (db.get_rc() != SQLITE_OK) {
       LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -560,7 +560,7 @@ void SQLStorage::storeEcuSerials(const std::vector<std::pair<std::string, std::s
 }
 
 bool SQLStorage::loadEcuSerials(std::vector<std::pair<std::string, std::string> >* serials) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -585,7 +585,7 @@ bool SQLStorage::loadEcuSerials(std::vector<std::pair<std::string, std::string> 
 }
 
 void SQLStorage::clearEcuSerials() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -600,7 +600,7 @@ void SQLStorage::clearEcuSerials() {
 
 void SQLStorage::storeInstalledVersions(const std::map<std::string, std::string>& installed_versions) {
   if (installed_versions.size() >= 1) {
-    SQLite3Guard db(config_.sqldb_path.c_str());
+    SQLite3Guard db(config_.path.c_str());
 
     clearInstalledVersions();
 
@@ -619,7 +619,7 @@ void SQLStorage::storeInstalledVersions(const std::map<std::string, std::string>
 }
 
 bool SQLStorage::loadInstalledVersions(std::map<std::string, std::string>* installed_versions) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -643,7 +643,7 @@ bool SQLStorage::loadInstalledVersions(std::map<std::string, std::string>* insta
 }
 
 void SQLStorage::clearInstalledVersions() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -656,7 +656,7 @@ void SQLStorage::clearInstalledVersions() {
   }
 }
 
-void SQLStorage::cleanUp() { boost::filesystem::remove_all(config_.sqldb_path); }
+void SQLStorage::cleanUp() { boost::filesystem::remove_all(config_.path); }
 
 bool SQLStorage::tableSchemasEqual(const std::string& left, const std::string& right) {
   boost::char_separator<char> sep(" \"\t\r\n", "(),;");
@@ -726,7 +726,7 @@ boost::movelib::unique_ptr<std::map<std::string, std::string> > SQLStorage::pars
 }
 
 std::string SQLStorage::getTableSchemaFromDb(const std::string& tablename) {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -746,7 +746,7 @@ std::string SQLStorage::getTableSchemaFromDb(const std::string& tablename) {
 }
 
 bool SQLStorage::dbMigrate() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());
@@ -789,7 +789,7 @@ bool SQLStorage::dbCheck() {
 }
 
 bool SQLStorage::dbInit() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (sqlite3_exec(db.get(), "BEGIN TRANSACTION;", NULL, NULL, NULL) != SQLITE_OK) {
     LOG_ERROR << "Can't begin transaction: " << sqlite3_errmsg(db.get());
@@ -818,7 +818,7 @@ bool SQLStorage::dbInit() {
 }
 
 int SQLStorage::getVersion() {
-  SQLite3Guard db(config_.sqldb_path.c_str());
+  SQLite3Guard db(config_.path.c_str());
 
   if (db.get_rc() != SQLITE_OK) {
     LOG_ERROR << "Can't open database: " << sqlite3_errmsg(db.get());

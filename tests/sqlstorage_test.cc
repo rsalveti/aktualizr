@@ -7,12 +7,11 @@
 TEST(sqlstorage, migrate) {
   TemporaryDirectory temp_dir;
   StorageConfig config;
-  config.path = temp_dir.Path();
-  config.sqldb_path = temp_dir.Path() / "test.db";
+  config.path = temp_dir.Path() / "test.db";
   config.schemas_path = "config/storage";
 
   SQLStorage storage(config);
-  boost::filesystem::remove_all(config.sqldb_path);
+  boost::filesystem::remove_all(config.path);
 
   EXPECT_FALSE(storage.dbCheck());
   EXPECT_TRUE(storage.dbMigrate());

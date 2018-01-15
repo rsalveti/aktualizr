@@ -53,7 +53,7 @@ boost::shared_ptr<INvStorage> INvStorage::newStorage(const StorageConfig& config
   (void)path;
   switch (config.type) {
     case kSqlite:
-      if (!boost::filesystem::exists(config.sqldb_path)) {
+      if (!boost::filesystem::exists(config.path)) {
         StorageConfig old_config;
         old_config.type = kFileSystem;
         old_config.path = path;

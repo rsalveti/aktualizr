@@ -299,7 +299,6 @@ void Config::updateFromPropertyTree(const boost::property_tree::ptree& pt) {
   CopyFromConfig(storage.tls_pkey_path, "storage.tls_pkey_path", boost::log::trivial::warning, pt);
   CopyFromConfig(storage.tls_clientcert_path, "storage.tls_clientcert_path", boost::log::trivial::warning, pt);
   CopyFromConfig(storage.path, "storage.path", boost::log::trivial::trace, pt);
-  CopyFromConfig(storage.sqldb_path, "storage.sqldb_path", boost::log::trivial::trace, pt);
   CopyFromConfig(storage.schemas_path, "storage.schemas_path", boost::log::trivial::trace, pt);
 
   CopyFromConfig(import.uptane_private_key_path, "import.uptane_private_key_path", boost::log::trivial::warning, pt);

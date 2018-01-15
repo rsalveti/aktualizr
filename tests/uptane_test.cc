@@ -726,7 +726,7 @@ TEST(Uptane, fs_to_sql_full) {
   config.type = kSqlite;
   config.uptane_metadata_path = "metadata";
   config.path = temp_dir.Path();
-  config.sqldb_path = temp_dir.Path() / "database.db";
+  config.path = temp_dir.Path() / "database.db";
   config.schemas_path = "config/storage";
 
   FSStorage fs_storage(config);
@@ -844,7 +844,7 @@ TEST(Uptane, fs_to_sql_partial) {
   config.type = kSqlite;
   config.uptane_metadata_path = "metadata";
   config.path = temp_dir.Path();
-  config.sqldb_path = temp_dir.Path() / "database.db";
+  config.path = temp_dir.Path() / "database.db";
   config.schemas_path = "config/storage";
 
   FSStorage fs_storage(config);
