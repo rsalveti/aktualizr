@@ -120,8 +120,8 @@ endif(BUILD_GENIVI)
 aktualizr_source_file_checks(main.cc ${SOURCES} ${HEADERS})
 
 ################## INSTALL RULES
-install(FILES ${PROJECT_SOURCE_DIR}/config/systemd/aktualizr-ubuntu.service DESTINATION /lib/systemd/system RENAME aktualizr.service  COMPONENT aktualizr)
-install(FILES ${PROJECT_SOURCE_DIR}/config/sota_ubuntu.toml DESTINATION /usr/lib/sota RENAME sota.toml  COMPONENT aktualizr)
+install(FILES ${PROJECT_SOURCE_DIR}/config/systemd/aktualizr-ubuntu.service DESTINATION lib/systemd/system RENAME aktualizr.service  COMPONENT aktualizr)
+install(FILES ${PROJECT_SOURCE_DIR}/config/sota_ubuntu.toml DESTINATION usr/lib/sota RENAME sota.toml  COMPONENT aktualizr)
 install(TARGETS aktualizr RUNTIME DESTINATION bin COMPONENT aktualizr)
 if(BUILD_GENIVI)
     install(FILES dbus/org.genivi.SotaClient.conf DESTINATION /etc/dbus-1/system.d)
