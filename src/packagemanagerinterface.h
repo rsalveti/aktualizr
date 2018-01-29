@@ -15,7 +15,6 @@ class PackageInterface {
   virtual ~PackageInterface() {}
   virtual data::InstallOutcome install(const data::PackageManagerCredentials &cred,
                                        const PackageConfig &pconfig) const = 0;
-  virtual Json::Value toEcuVersion(const std::string &ecu_serial, const Json::Value &custom) const = 0;
 
  protected:
   std::string ref_name;

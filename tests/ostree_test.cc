@@ -16,17 +16,6 @@
 
 boost::filesystem::path sysroot;
 
-TEST(OstreePackage, ToEcuVersion) {
-  OstreePackage op("branch-name-hash", "hash", "pull_uri");
-  Json::Value custom;
-  custom["key"] = "value";
-  Json::Value ecuver = op.toEcuVersion("ecu_serial", custom);
-  EXPECT_EQ(ecuver["custom"]["key"], "value");
-  EXPECT_EQ(ecuver["ecu_serial"], "ecu_serial");
-  EXPECT_EQ(ecuver["installed_image"]["fileinfo"]["hashes"]["sha256"], "hash");
-  EXPECT_EQ(ecuver["installed_image"]["filepath"], "branch-name-hash");
-}
-
 TEST(OstreePackage, InstallBadUri) {
   OstreePackage op("branch-name-hash", "hash", "bad_uri");
   TemporaryDirectory temp_dir;

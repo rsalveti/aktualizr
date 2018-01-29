@@ -18,27 +18,6 @@ class PackageFake : public PackageInterface {
     (void)pconfig;
     return data::InstallOutcome(data::OK, "Good");
   }
-
-  Json::Value toEcuVersion(const std::string &ecu_serial, const Json::Value &custom) const {
-    Json::Value installed_image;
-    installed_image["filepath"] = ref_name;
-    installed_image["fileinfo"]["length"] = 0;
-    installed_image["fileinfo"]["hashes"]["sha256"] = refhash;
-    installed_image["fileinfo"]["custom"] = false;
-
-    Json::Value value;
-    value["attacks_detected"] = "";
-    value["installed_image"] = installed_image;
-    value["ecu_serial"] = ecu_serial;
-    value["previous_timeserver_time"] = "1970-01-01T00:00:00Z";
-    value["timeserver_time"] = "1970-01-01T00:00:00Z";
-    if (custom != Json::nullValue) {
-      value["custom"] = custom;
-    } else {
-      value["custom"] = false;
-    }
-    return value;
-  }
 };
 
 class PackageManagerFake : public PackageManagerInterface {
