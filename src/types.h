@@ -104,14 +104,14 @@ struct UpdateReport {
 class PackageManagerCredentials {
  public:
   PackageManagerCredentials(const CryptoKey& cryptokey);
-  boost::filesystem::path ca_file() const;
-  boost::filesystem::path pkey_file() const;
-  boost::filesystem::path cert_file() const;
+  const std::string& ca_file() const;
+  const std::string& pkey_file() const;
+  const std::string& cert_file() const;
 
  private:
-  TemporaryFile tmp_ca_file;
-  TemporaryFile tmp_pkey_file;
-  TemporaryFile tmp_cert_file;
+  const std::string ca_path;
+  const std::string pkey_path;
+  const std::string cert_path;
 };
 }
 

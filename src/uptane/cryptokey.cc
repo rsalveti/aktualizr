@@ -5,7 +5,10 @@
 
 CryptoKey::CryptoKey(const boost::shared_ptr<INvStorage> &backend, const Config &config)
     : backend_(backend),
-      config_(config)
+      config_(config),
+      tmp_ca_file("ostree-ca"),
+      tmp_cert_file("ostree-cert"),
+      tmp_pkey_file("ostree-pkey")
 #ifdef BUILD_P11
       ,
       p11_(config.p11)
@@ -14,42 +17,52 @@ CryptoKey::CryptoKey(const boost::shared_ptr<INvStorage> &backend, const Config 
 }
 
 std::string CryptoKey::getPkey() const {
-  std::string pkey;
 #ifdef BUILD_P11
   if (config_.tls.pkey_source == kPkcs11) {
-    pkey = p11_->getTlsPkeyId();
+    return p11_->getTlsPkeyId();
   }
 #endif
   if (config_.tls.pkey_source == kFile) {
-    backend_->loadTlsPkey(&pkey);
+    std::string pkey;
+    if (backend_->loadTlsPkey(&pkey)) {
+      tmp_pkey_file.PutContents(pkey);
+      return tmp_pkey_file.Path().c_str();
+    }
   }
-  return pkey;
+
+  return "";
 }
 
 std::string CryptoKey::getCert() const {
-  std::string cert;
 #ifdef BUILD_P11
   if (config_.tls.cert_source == kPkcs11) {
-    cert = p11_->getTlsCertId();
+    return p11_->getTlsCertId();
   }
 #endif
   if (config_.tls.cert_source == kFile) {
-    backend_->loadTlsCert(&cert);
+    std::string cert;
+    if (backend_->loadTlsCert(&cert)) {
+      tmp_cert_file.PutContents(cert);
+      return tmp_cert_file.Path().c_str();
+    }
   }
-  return cert;
+  return "";
 }
 
 std::string CryptoKey::getCa() const {
-  std::string ca;
 #ifdef BUILD_P11
   if (config_.tls.ca_source == kPkcs11) {
-    ca = p11_->getTlsCacertId();
+    return p11_->getTlsCacertId();
   }
 #endif
   if (config_.tls.ca_source == kFile) {
-    backend_->loadTlsCa(&ca);
+    std::string ca;
+    if (backend_->loadTlsCa(&ca)) {
+      tmp_ca_file.PutContents(ca);
+      return tmp_ca_file.Path().c_str();
+    }
   }
-  return ca;
+  return "";
 }
 
 std::string CryptoKey::getCN() const {
@@ -104,6 +117,8 @@ Json::Value CryptoKey::signTuf(const Json::Value &in_data) {
 #endif
   if (config_.uptane.key_source == kFile) {
     backend_->loadPrimaryPrivate(&private_key);
+  } else {  // PKCS#11
+    private_key = config_.p11.uptane_key_id;
   }
   std::string b64sig =
       Utils::toBase64(Crypto::RSAPSSSign(crypto_engine, private_key, Json::FastWriter().write(in_data)));

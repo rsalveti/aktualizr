@@ -127,16 +127,12 @@ UpdateReport UpdateReport::fromJson(const std::string& json_str) {
 }
 
 PackageManagerCredentials::PackageManagerCredentials(const CryptoKey& cryptokey)
-    : tmp_ca_file("ostree-ca"), tmp_pkey_file("ostree-pkey"), tmp_cert_file("ostree-cert") {
-  tmp_ca_file.PutContents(cryptokey.getCa());
-  tmp_pkey_file.PutContents(cryptokey.getPkey());
-  tmp_cert_file.PutContents(cryptokey.getCert());
-}
+    : ca_path(cryptokey.getCa()), pkey_path(cryptokey.getPkey()), cert_path(cryptokey.getCert()) {}
 
-boost::filesystem::path PackageManagerCredentials::ca_file() const { return tmp_ca_file.Path(); }
+const std::string& PackageManagerCredentials::ca_file() const { return ca_path; }
 
-boost::filesystem::path PackageManagerCredentials::pkey_file() const { return tmp_pkey_file.Path(); }
+const std::string& PackageManagerCredentials::pkey_file() const { return pkey_path; }
 
-boost::filesystem::path PackageManagerCredentials::cert_file() const { return tmp_cert_file.Path(); }
+const std::string& PackageManagerCredentials::cert_file() const { return cert_path; }
 }
 // vim: set tabstop=2 shiftwidth=2 expandtab:

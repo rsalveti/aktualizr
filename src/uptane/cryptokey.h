@@ -27,6 +27,9 @@ class CryptoKey {
  private:
   const boost::shared_ptr<INvStorage> &backend_;
   Config config_;
+  mutable TemporaryFile tmp_ca_file;
+  mutable TemporaryFile tmp_cert_file;
+  mutable TemporaryFile tmp_pkey_file;
 #ifdef BUILD_P11
   P11EngineGuard p11_;
 #endif
