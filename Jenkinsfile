@@ -6,6 +6,6 @@ node {
         }
     }
     stage('Build!') {
-        sh "scripts/test.sh"
+        sh "src/scripts/test.sh"
     }
 }
