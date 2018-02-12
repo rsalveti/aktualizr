@@ -1,4 +1,8 @@
 node {
-    stage "Build!"
-    sh "scripts/test.sh"
+    stage('Checkout'){
+        checkout scm
+    }
+    stage('"Build!') {
+        sh "scripts/test.sh"
+    }
 }
