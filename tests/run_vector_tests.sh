@@ -9,14 +9,12 @@ fi
 
 pip install -r "$1/requirements.txt"
 
-PORT=`$1/../get_open_port.py`
+PORT=$("$1/../get_open_port.py")
 
-$1/generator.py -t uptane --signature-encoding base64 -o vectors --cjson json-subset
-if [ "$2" == "valgrind" ]; then
-  $1/server.py -t uptane --signature-encoding base64 -P $PORT &
-else
-  $1/server.py -t uptane --signature-encoding base64 -P $PORT &
-fi
+echo "Port is $PORT"
+
+"$1/generator.py" -t uptane --signature-encoding base64 -o vectors --cjson json-subset
+"$1/server.py" -t uptane --signature-encoding base64 -P $PORT &
 sleep 3
 trap 'kill %1' EXIT
 
