@@ -1,6 +1,8 @@
 node {
     stage('Checkout'){
-        checkout scm
+        dir('src') {
+            checkout scm
+        }
     }
     stage('"Build!') {
         sh "scripts/test.sh"
