@@ -2,9 +2,10 @@ node {
     stage('Checkout'){
         dir('src') {
             checkout scm
+            sh 'git submodule update --init' 
         }
     }
-    stage('"Build!') {
+    stage('Build!') {
         sh "scripts/test.sh"
     }
 }
