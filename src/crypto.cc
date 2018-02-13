@@ -1,5 +1,7 @@
 #include "crypto.h"
 
+#include <sys/random.h>
+
 #include <boost/algorithm/hex.hpp>
 #include <boost/scoped_array.hpp>
 #include <iostream>
@@ -249,6 +251,12 @@ bool Crypto::extractSubjectCN(const std::string &cert, std::string *cn) {
   return true;
 }
 
+static void waitRandomSourceInitialized() {
+  uint8_t c;
+
+  getrandom(&c, 1, 0);
+}
+
 /**
  * Generate a RSA keypair
  * @param public_key Generated public part of key
@@ -259,6 +267,8 @@ bool Crypto::extractSubjectCN(const std::string &cert, std::string *cn) {
 bool Crypto::generateRSAKeyPair(std::string *public_key, std::string *private_key) {
   int bits = 4096;
   int ret = 0;
+
+  waitRandomSourceInitialized();
 
 #if AKTUALIZR_OPENSSL_PRE_11
   RSA *r = RSA_generate_key(bits,   /* number of bits for the key - 4096 is a sensible value */
