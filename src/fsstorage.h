@@ -30,6 +30,10 @@ class FSStorage : public INvStorage {
   virtual bool loadMetadata(Uptane::MetaPack* metadata);
   virtual void clearMetadata();
 
+  virtual void storeGatewayUrl(const std::string& url);
+  virtual bool loadGatewayUrl(std::string* url);
+  virtual void clearGatewayUrl();
+
   virtual void storeDeviceId(const std::string& device_id);
   virtual bool loadDeviceId(std::string* device_id);
   virtual void clearDeviceId();

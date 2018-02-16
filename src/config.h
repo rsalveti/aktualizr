@@ -133,6 +133,7 @@ struct StorageConfig {
         tls_cacert_path("ca.pem"),
         tls_pkey_path("pkey.pem"),
         tls_clientcert_path("client.pem"),
+        gateway_url_path("gateway.url"),
         schemas_path("/usr/lib/sota/schemas") {}
   StorageType type;
   boost::filesystem::path path;
@@ -144,6 +145,7 @@ struct StorageConfig {
   boost::filesystem::path tls_cacert_path;
   boost::filesystem::path tls_pkey_path;
   boost::filesystem::path tls_clientcert_path;
+  boost::filesystem::path gateway_url_path;
 
   // SQLite storage
   boost::filesystem::path schemas_path;
@@ -155,12 +157,14 @@ struct ImportConfig {
         uptane_public_key_path(""),
         tls_cacert_path(""),
         tls_pkey_path(""),
-        tls_clientcert_path("") {}
+        tls_clientcert_path("")
+        gateway_url_path("") {}
   boost::filesystem::path uptane_private_key_path;
   boost::filesystem::path uptane_public_key_path;
   boost::filesystem::path tls_cacert_path;
   boost::filesystem::path tls_pkey_path;
   boost::filesystem::path tls_clientcert_path;
+  boost::filesystem::path gateway_url_path;
 };
 
 class Config {

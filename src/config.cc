@@ -294,6 +294,7 @@ void Config::updateFromPropertyTree(const boost::property_tree::ptree& pt) {
   CopyFromConfig(storage.tls_cacert_path, "storage.tls_cacert_path", boost::log::trivial::warning, pt);
   CopyFromConfig(storage.tls_pkey_path, "storage.tls_pkey_path", boost::log::trivial::warning, pt);
   CopyFromConfig(storage.tls_clientcert_path, "storage.tls_clientcert_path", boost::log::trivial::warning, pt);
+  CopyFromConfig(storage.gateway_url_path, "storage.gateway_url_path", boost::log::trivial::warning, pt);
   CopyFromConfig(storage.path, "storage.path", boost::log::trivial::trace, pt);
   CopyFromConfig(storage.sqldb_path, "storage.sqldb_path", boost::log::trivial::trace, pt);
   CopyFromConfig(storage.schemas_path, "storage.schemas_path", boost::log::trivial::trace, pt);
@@ -303,6 +304,7 @@ void Config::updateFromPropertyTree(const boost::property_tree::ptree& pt) {
   CopyFromConfig(import.tls_cacert_path, "import.tls_cacert_path", boost::log::trivial::warning, pt);
   CopyFromConfig(import.tls_pkey_path, "import.tls_pkey_path", boost::log::trivial::warning, pt);
   CopyFromConfig(import.tls_clientcert_path, "import.tls_clientcert_path", boost::log::trivial::warning, pt);
+  CopyFromConfig(import.gateway_url_path, "import.gateway_url_path", boost::log::trivial::warning, pt);
 }
 
 void Config::updateFromCommandLine(const boost::program_options::variables_map& cmd) {
@@ -532,6 +534,7 @@ void Config::writeToFile(const boost::filesystem::path& filename) {
   writeOption(sink, storage.tls_cacert_path, "tls_cacert_path");
   writeOption(sink, storage.tls_pkey_path, "tls_pkey_path");
   writeOption(sink, storage.tls_clientcert_path, "tls_clientcert_path");
+  writeOption(sink, storage.gateway_url_path, "gateway_url_path");
   sink << "\n";
 
   sink << "[import]\n";
@@ -540,5 +543,6 @@ void Config::writeToFile(const boost::filesystem::path& filename) {
   writeOption(sink, import.tls_cacert_path, "tls_cacert_path");
   writeOption(sink, import.tls_pkey_path, "tls_pkey_path");
   writeOption(sink, import.tls_clientcert_path, "tls_clientcert_path");
+  writeOption(sink, import.gateway_url_path, "gateway_url_path");
   sink << "\n";
 }

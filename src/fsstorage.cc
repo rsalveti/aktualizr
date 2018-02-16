@@ -125,7 +125,7 @@ void FSStorage::clearTlsCreds() {
   boost::filesystem::remove(Utils::absolutePath(config_.path, config_.tls_pkey_path));
 }
 
-bool FSStorage::loadTlsCommon(std::string* data, const boost::filesystem::path& path_in) {
+bool FSStorage::loadFileCommon(std::string* data, const boost::filesystem::path& path_in) {
   boost::filesystem::path path(Utils::absolutePath(config_.path, path_in));
   if (!boost::filesystem::exists(path)) return false;
 
@@ -134,11 +134,13 @@ bool FSStorage::loadTlsCommon(std::string* data, const boost::filesystem::path& 
   return true;
 }
 
-bool FSStorage::loadTlsCa(std::string* ca) { return loadTlsCommon(ca, config_.tls_cacert_path); }
+bool FSStorage::loadTlsCa(std::string* ca) { return loadFileCommon(ca, config_.tls_cacert_path); }
 
-bool FSStorage::loadTlsCert(std::string* cert) { return loadTlsCommon(cert, config_.tls_clientcert_path); }
+bool FSStorage::loadTlsCert(std::string* cert) { return loadFileCommon(cert, config_.tls_clientcert_path); }
 
-bool FSStorage::loadTlsPkey(std::string* pkey) { return loadTlsCommon(pkey, config_.tls_pkey_path); }
+bool FSStorage::loadTlsPkey(std::string* pkey) { return loadFileCommon(pkey, config_.tls_pkey_path); }
+
+bool FSStorage::loadGatewayUrl(std::string* url) { return loadFileCommon(url, config_.gateway_url_path); }
 
 void FSStorage::storeMetadata(const Uptane::MetaPack& metadata) {
   boost::filesystem::path image_path = Utils::absolutePath(config_.path, config_.uptane_metadata_path) / "repo";

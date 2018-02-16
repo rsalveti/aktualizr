@@ -99,6 +99,10 @@ class INvStorage {
   virtual bool loadTlsPkey(std::string* cert) = 0;
   virtual void clearTlsCreds() = 0;
 
+  virtual void storeGatewayUrl(const std::string& url) = 0;
+  virtual bool loadGatewayUrl(std::string* url) = 0;
+  virtual void clearGatewayUrl() = 0;
+
   virtual void storeMetadata(const Uptane::MetaPack& metadata) = 0;
   virtual bool loadMetadata(Uptane::MetaPack* metadata) = 0;
   virtual void clearMetadata() = 0;

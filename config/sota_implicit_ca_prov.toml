@@ -1,0 +1,10 @@
+[storage]
+type = "sqlite"
+sqldb_path = "/var/sota/sql.db"
+schemas_path = "/usr/lib/sota/schemas"
+
+[import]
+config.import.tls_cacert_path = "/var/sota/ca.pem"
+config.import.tls_pkey_path = "/var/sota/pkey.pem"
+config.import.tls_clientcert_path = "/var/sota/client.pem"
+config.import.gateway_url_path = "/var/sota/gateway.url"
