@@ -5,3 +5,6 @@ provision_path = "/var/sota/sota_provisioning_credentials.zip"
 type = "sqlite"
 sqldb_path = "/var/sota/sql.db"
 schemas_path = "/usr/lib/sota/schemas"
+
+[uptane]
+key_type = "ED25519"
