@@ -1,0 +1,13 @@
+TlsConfig DEFINITIONS ::= BEGIN
+	IMPORTS AKFilePath,
+		AKUrl FROM Common
+		CryptoSource FROM CryptoSource;
+	TlsConfig ::= SEQUENCE {
+		server		AKUrl,
+		serverUrlPath	AKFilePath,
+		caSource 	CryptoSource,
+		pkeySource	CryptoSource,
+		certSource	CryptoSource,
+		...
+	}
+END

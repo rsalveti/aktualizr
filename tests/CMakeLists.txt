@@ -44,6 +44,9 @@ add_custom_target(check COMMAND CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND}
 add_custom_target(check-full COMMAND CTEST_OUTPUT_ON_FAILURE=1 ${CMAKE_CTEST_COMMAND}
                   -E test_uptane_vectors DEPENDS build_tests)
 
+# Reference asn1c libraries
+add_asn1c_lib(config asn1-reference/common asn1-reference/config/cryptosource asn1-reference/config/tlsconfig)
+
 # List of source files to run clang-format and clang-check on. Automatically
 # appended to by add_aktualizr_test, but anything that doesn't use that must be
 # manually added to this list.
@@ -153,7 +156,7 @@ add_aktualizr_test(NAME uptane_serial SOURCES uptane_serial_test.cc ARGS ${PROJE
 add_aktualizr_test(NAME uptane_secondary SOURCES uptane_secondary_test.cc)
 
 add_executable(aktualizr_uptane_vector_tests uptane_vector_tests.cc)
-target_link_libraries(aktualizr_uptane_vector_tests aktualizr_static_lib ${TEST_LIBS} crypto)
+target_link_libraries(aktualizr_uptane_vector_tests aktualizr_static_lib ${TEST_LIBS} crypto config_lib)
 set(TEST_SOURCES ${TEST_SOURCES} uptane_vector_tests.cc)
 
 add_test(NAME test_uptane_vectors COMMAND ${PROJECT_SOURCE_DIR}/tests/run_vector_tests.sh
@@ -441,6 +444,7 @@ add_test(NAME certprovider-ca COMMAND ${PROJECT_SOURCE_DIR}/tests/run_certprovid
 
 # config file test for collisions between import and FS->SQL migration paths
 add_test(NAME config-import COMMAND ${PROJECT_SOURCE_DIR}/tests/run_import_clash_test.sh ${PROJECT_SOURCE_DIR}/config)
+
 
 list(REMOVE_DUPLICATES TEST_SOURCES)
 # message("${TEST_SOURCES}")

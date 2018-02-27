@@ -9,6 +9,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/filesystem.hpp>
 
+#include "asn1-cer.h"
 #include "bootstrap.h"
 #include "exceptions.h"
 #include "utils.h"
@@ -588,4 +589,76 @@ void Config::writeToFile(const boost::filesystem::path& filename) {
   writeOption(sink, import.tls_pkey_path, "tls_pkey_path");
   writeOption(sink, import.tls_clientcert_path, "tls_clientcert_path");
   sink << "\n";
+}
+
+std::string TlsConfig::cer_serialize() {
+  std::string res;
+  res = cer_encode_sequence() + cer_encode_string(server, kAsn1OctetString) +
+        cer_encode_string(server_url_path.string(), kAsn1OctetString) + cer_encode_integer(ca_source, kAsn1Enum) +
+        cer_encode_integer(pkey_source, kAsn1Enum) + cer_encode_integer(cert_source, kAsn1Enum) + cer_encode_endcons();
+  return res;
+}
+
+void TlsConfig::cer_deserialize(const std::string& cer) {
+  int32_t endpos;
+  int32_t int_param;
+  std::string string_param;
+
+  std::string cer_local = cer;
+
+  if (cer_decode_token(cer_local, &endpos, &int_param, &string_param) != kSequence) throw deserialization_error();
+
+  int32_t sequence_length = int_param;
+  cer_local = cer_local.substr(endpos);
+
+  if (cer_decode_token(cer_local, &endpos, &int_param, &string_param) != kOctetString) throw deserialization_error();
+  server = string_param;
+  cer_local = cer_local.substr(endpos);
+
+  if (cer_decode_token(cer_local, &endpos, &int_param, &string_param) != kOctetString) throw deserialization_error();
+  server_url_path = string_param;
+  cer_local = cer_local.substr(endpos);
+
+  if (cer_decode_token(cer_local, &endpos, &int_param, &string_param) != kInteger) throw deserialization_error();
+  if (int_param < kFile || int_param > kImplicit) throw deserialization_error();
+  ca_source = static_cast<CryptoSource>(int_param);
+  cer_local = cer_local.substr(endpos);
+
+  if (cer_decode_token(cer_local, &endpos, &int_param, &string_param) != kInteger) throw deserialization_error();
+  if (int_param < kFile || int_param > kImplicit) throw deserialization_error();
+  pkey_source = static_cast<CryptoSource>(int_param);
+
+  cer_local = cer_local.substr(endpos);
+
+  if (cer_decode_token(cer_local, &endpos, &int_param, &string_param) != kInteger) throw deserialization_error();
+  if (int_param < kFile || int_param > kImplicit) throw deserialization_error();
+  cert_source = static_cast<CryptoSource>(int_param);
+
+  cer_local = cer_local.substr(endpos);
+
+  // Extra elements of the sequence are ignored
+  if (sequence_length == -1) {
+    int nestedness = 0;
+    for (;;) {
+      int type = cer_decode_token(cer_local, &endpos, &int_param, &string_param);
+      cer_local = cer_local.substr(endpos);
+
+      switch (type) {
+        case kUnknown:
+          throw deserialization_error();
+
+        case kEndSequence:
+          if (nestedness == 0)
+            return;
+          else
+            --nestedness;
+          break;
+
+        case kSequence:
+          if (int_param == -1)  // indefinite length, matching 0000 should follow
+            ++nestedness;
+          break;
+      }
+    }
+  }
 }
