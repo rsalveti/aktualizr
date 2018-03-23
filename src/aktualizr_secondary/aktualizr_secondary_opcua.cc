@@ -2,8 +2,9 @@
 
 #include <boost/smart_ptr/make_unique.hpp>
 
-AktualizrSecondaryOpcua::AktualizrSecondaryOpcua(const AktualizrSecondaryConfig& config)
-    : running_(true), config_(config) {
+AktualizrSecondaryOpcua::AktualizrSecondaryOpcua(const AktualizrSecondaryConfig& config,
+                                                 boost::shared_ptr<INvStorage>& storage)
+    : AktualizrSecondaryCommon(config, storage), running_(true), delegate_(this) {
   server_ = boost::make_unique<opcuabridge::Server>(&delegate_, config_.network.port);
 }
 
