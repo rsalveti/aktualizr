@@ -117,7 +117,21 @@ Json::Value SotaUptaneClient::AssembleManifest() {
   std::map<std::string, boost::shared_ptr<Uptane::SecondaryInterface> >::iterator it;
   for (it = secondaries.begin(); it != secondaries.end(); it++) {
     Json::Value secmanifest = it->second->getManifest();
-    if (secmanifest != Json::nullValue) result.append(secmanifest);
+
+    if (secmanifest.isMember("signatures") && secmanifest.isMember("signed")) {
+      auto public_key = it->second->getPublicKey();
+      PublicKey public_key_object(public_key.second, keyTypeToString(public_key.first));
+      std::string canonical = Json::FastWriter().write(secmanifest["signed"]);
+      bool verified =
+          Crypto::VerifySignature(public_key_object, secmanifest["signatures"][0]["sig"].asString(), canonical);
+      if (verified) {
+        result.append(secmanifest);
+      } else {
+        LOG_ERROR << "Secondary manifest verification failed, manifest: " << secmanifest;
+      }
+    } else {
+      LOG_ERROR << "Secondary manifest is corrupted or not signed, manifest: " << secmanifest;
+    }
   }
   return result;
 }
