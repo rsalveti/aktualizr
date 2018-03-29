@@ -26,7 +26,7 @@ class SecondaryFactory {
         break;
       case kIpUptane:
         return boost::make_shared<IpUptaneSecondary>(sconfig);
-      case kOpcua:
+      case kOpcuaUptane:
 #ifdef OPCUA_SECONDARY_ENABLED
         return boost::make_shared<OpcuaSecondary>(sconfig);
 #else
