@@ -134,6 +134,8 @@ class Config {
   ImportConfig import;
 
  private:
+  std::vector<boost::filesystem::path> config_dirs = {"/usr/sota/conf.d/", "/etc/sota/conf.d/"};
+  void updateFromDirs();
   void updateFromPropertyTree(const boost::property_tree::ptree& pt);
   void updateFromToml(const boost::filesystem::path& filename);
   void updateFromCommandLine(const boost::program_options::variables_map& cmd);
