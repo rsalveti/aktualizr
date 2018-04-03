@@ -139,7 +139,6 @@ TEST(Uptane, Initialize) {
   conf.storage.uptane_private_key_path = "private.key";
   conf.storage.uptane_private_key_path = "public.key";
 
-  boost::filesystem::remove_all(temp_dir.Path());
   EXPECT_FALSE(boost::filesystem::exists(conf.storage.path / conf.storage.tls_clientcert_path));
   EXPECT_FALSE(boost::filesystem::exists(conf.storage.path / conf.storage.tls_cacert_path));
   EXPECT_FALSE(boost::filesystem::exists(conf.storage.path / conf.storage.tls_pkey_path));
@@ -177,7 +176,6 @@ TEST(Uptane, InitializeTwice) {
   conf.storage.uptane_private_key_path = "private.key";
   conf.storage.uptane_public_key_path = "public.key";
 
-  boost::filesystem::remove_all(temp_dir.Path());
   EXPECT_FALSE(boost::filesystem::exists(conf.storage.path / conf.storage.tls_clientcert_path));
   EXPECT_FALSE(boost::filesystem::exists(conf.storage.path / conf.storage.tls_cacert_path));
   EXPECT_FALSE(boost::filesystem::exists(conf.storage.path / conf.storage.tls_pkey_path));
@@ -267,7 +265,6 @@ TEST(Uptane, PetNameCreation) {
   conf.storage.uptane_private_key_path = "private.key";
   conf.storage.uptane_public_key_path = "public.key";
   conf.uptane.primary_ecu_serial = "testecuserial";
-  boost::filesystem::create_directory(temp_dir.Path());
   boost::filesystem::copy_file("tests/test_data/cred.zip", temp_dir.Path() / "cred.zip");
   conf.provision.provision_path = temp_dir.Path() / "cred.zip";
 
@@ -285,19 +282,19 @@ TEST(Uptane, PetNameCreation) {
 
   // Make sure a new name is generated if the config does not specify a name and
   // there is no device_id file.
+  TemporaryDirectory temp_dir2;
   {
-    boost::filesystem::remove_all(temp_dir.Path());
-    boost::filesystem::create_directory(temp_dir.Path());
-    boost::filesystem::copy_file("tests/test_data/cred.zip", temp_dir.Path() / "cred.zip");
+    conf.storage.path = temp_dir2.Path();
+    boost::filesystem::copy_file("tests/test_data/cred.zip", temp_dir2.Path() / "cred.zip");
     conf.uptane.device_id = "";
 
     boost::shared_ptr<INvStorage> storage = boost::make_shared<FSStorage>(conf.storage);
-    HttpFake http(temp_dir.Path());
+    HttpFake http(temp_dir2.Path());
     Uptane::Repository uptane(conf, storage, http);
     EXPECT_TRUE(uptane.initialize());
 
-    EXPECT_TRUE(boost::filesystem::exists(device_path));
-    test_name2 = Utils::readFile(device_path);
+    EXPECT_TRUE(boost::filesystem::exists(temp_dir2.Path() / "device_id"));
+    test_name2 = Utils::readFile(temp_dir2.Path() / "device_id");
     EXPECT_NE(test_name2, test_name1);
   }
 
@@ -310,26 +307,26 @@ TEST(Uptane, PetNameCreation) {
     Uptane::Repository uptane(conf, storage, http);
     EXPECT_TRUE(uptane.initialize());
 
-    EXPECT_TRUE(boost::filesystem::exists(device_path));
-    EXPECT_EQ(Utils::readFile(device_path), test_name2);
+    EXPECT_TRUE(boost::filesystem::exists(temp_dir2.Path() / "device_id"));
+    EXPECT_EQ(Utils::readFile(temp_dir2.Path() / "device_id"), test_name2);
   }
 
   // If the device_id file is removed, but the field is still present in the
   // config, re-initializing the config should still read the device_id from
   // config.
   {
-    boost::filesystem::remove_all(temp_dir.Path());
-    boost::filesystem::create_directory(temp_dir.Path());
-    boost::filesystem::copy_file("tests/test_data/cred.zip", temp_dir.Path() / "cred.zip");
+    TemporaryDirectory temp_dir3;
+    conf.storage.path = temp_dir3.Path();
+    boost::filesystem::copy_file("tests/test_data/cred.zip", temp_dir3.Path() / "cred.zip");
     conf.uptane.device_id = test_name2;
 
     boost::shared_ptr<INvStorage> storage = boost::make_shared<FSStorage>(conf.storage);
-    HttpFake http(temp_dir.Path());
+    HttpFake http(temp_dir3.Path());
     Uptane::Repository uptane(conf, storage, http);
     EXPECT_TRUE(uptane.initialize());
 
-    EXPECT_TRUE(boost::filesystem::exists(device_path));
-    EXPECT_EQ(Utils::readFile(device_path), test_name2);
+    EXPECT_TRUE(boost::filesystem::exists(temp_dir3.Path() / "device_id"));
+    EXPECT_EQ(Utils::readFile(temp_dir3.Path() / "device_id"), test_name2);
   }
 }
 
